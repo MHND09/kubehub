@@ -5,7 +5,11 @@ FROM ghcr.io/kubeflow/kubeflow/notebook-servers/jupyter:latest
 USER root
 
 # Install JupyterHub and dependencies
-RUN apt-get update && apt-get install -y npm nodejs
+USER root
+RUN apt-get update && apt-get install -y curl \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
 RUN pip install jupyterhub
 
 # Switch back to jovyan (required by Kubeflow)
